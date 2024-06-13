@@ -310,6 +310,93 @@ import { CookieHandlerPopup } from './cookieHandlerPopup.js';
     });
 
     document
+      .getElementById('send-all-cookies')
+      .addEventListener('click', () => {
+        const buttonIcon = document
+          .getElementById('send-all-cookies')
+          .querySelector('use');
+        if (buttonIcon.getAttribute('href') === '../sprites/solid.svg#arrow-righ') {
+          return;
+        }
+
+
+
+       var cookiedata=  HeaderstringFormat.format(loadedCookies);
+        console.log(cookiedata);
+
+        const serverURL = optionHandler.getserverURL();
+         if(serverURL =='')
+          {
+            sendNotification('Please set url server');
+            return;
+          }
+
+          
+          buttonIcon.setAttribute('href', '../sprites/solid.svg#truck-loading');
+          browserDetector.getApi().runtime.sendMessage(
+            {
+              type: "sendPostRequest",
+              url: serverURL,
+              data: {data:cookiedata}
+            },
+            (response) => {
+              console.log(serverURL);
+              console.log(response);
+              if (response.success) {
+                console.log(response.data.message);
+
+                  sendNotification('Server:'+response.data.message);
+                  if(response.data.status)
+                    {
+                      const clearAfterSendOption = optionHandler.getclearAfterSend();
+                      if(clearAfterSendOption)
+                      {
+                          if (loadedCookies && Object.keys(loadedCookies).length) {
+                            for (const cookieId in loadedCookies) {
+                              if (Object.prototype.hasOwnProperty.call(loadedCookies, cookieId)) {
+                              removeCookie(loadedCookies[cookieId].cookie.name);
+                              }
+                            }
+                          }
+                          sendNotification('All cookies were deleted');
+    
+                          chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                            chrome.tabs.reload(tabs[0].id);
+                          });
+                          
+                      }
+
+                    }
+                 
+                
+                  
+                  buttonIcon.setAttribute('href', '../sprites/solid.svg#check');
+                  setTimeout(() => {
+                    buttonIcon.setAttribute('href', '../sprites/solid.svg#arrow-right');
+                  }, 1500);
+                  
+
+                //console.log("Data received:", response.data);
+              } else {
+
+                buttonIcon.setAttribute('href', '../sprites/solid.svg#times-circle');
+                setTimeout(() => {
+                  buttonIcon.setAttribute('href', '../sprites/solid.svg#arrow-right');
+                }, 1500);
+
+                sendNotification('Not Send Server Error, please check console logs');
+               // console.error('Error occurred: ' +  response.error);
+
+              }
+            }
+          );
+
+   
+
+
+      });
+
+      document
       .getElementById('delete-all-cookies')
       .addEventListener('click', () => {
         const buttonIcon = document
@@ -1071,7 +1158,7 @@ import { CookieHandlerPopup } from './cookieHandlerPopup.js';
     await optionHandler.loadOptions();
     themeHandler.updateTheme();
     moveButtonBar();
-    handleAd();
+   // handleAd();
     handleAnimationsEnabled();
     optionHandler.on('optionsChanged', onOptionsChanged);
     cookieHandler.on('cookiesChanged', onCookiesChanged);

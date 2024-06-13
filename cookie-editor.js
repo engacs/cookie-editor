@@ -1,6 +1,7 @@
 import { BrowserDetector } from './interface/lib/browserDetector.js';
 import { PermissionHandler } from './interface/lib/permissionHandler.js';
 
+
 (function () {
   console.log('starting background script');
   // TODO: Separate connections from CookieHandler and OptionsHandler.
@@ -59,6 +60,25 @@ import { PermissionHandler } from './interface/lib/permissionHandler.js';
   function handleMessage(request, sender, sendResponse) {
     console.log('message received: ' + (request.type || 'unknown'));
     switch (request.type) {
+      case 'sendPostRequest': {
+       // console.log("Halkaan");
+        const url = request.url;
+        const data = request.data;
+    
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => sendResponse({ success: true, data: data }))
+        .catch(error => sendResponse({ success: false, error: error }));
+    
+        // This return statement is necessary to indicate that the response will be sent asynchronously
+        return true;
+      }
       case 'getTabs': {
         browserDetector.getApi().tabs.query({}, function (tabs) {
           sendResponse(tabs);
@@ -152,6 +172,7 @@ import { PermissionHandler } from './interface/lib/permissionHandler.js';
       }
     }
   }
+
 
   /**
    * Handles connections from clients to this script.

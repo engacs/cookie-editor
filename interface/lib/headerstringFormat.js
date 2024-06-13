@@ -18,7 +18,7 @@ export class HeaderstringFormat {
       }
       const cookieParts = rawCookie.split('=');
       if (cookieParts.length != 2) {
-        console.log('invalid cookie: ', rawCookie);
+       //  console.log('invalid cookie: ', rawCookie);
         continue;
       }
       cookies.push({

@@ -14,7 +14,7 @@ export class ThemeHandler {
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', (event) => {
-        console.log('theme changed!');
+       //  console.log('theme changed!');
         this.updateTheme();
       });
   }

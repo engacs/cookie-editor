@@ -8,13 +8,31 @@
   <script src="options.js" type="module" defer></script>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="../theme/switch.css" />
-  <title>Cookie-Editor Options</title>
+  <title>URL Cookie-Editor Options</title>
 </head>
 
 <body>
   <div class="container">
     <fieldset>
       <legend>Options</legend>
+      <div class="input-container">
+        <label for="server_url">Server URL</label>
+          <input type="text" id="server_url" aria-describedby="server_url-cookie-hint" />
+        <div class="hint" id="server_url-cookie-hint">
+          When set, url server every time your click its will send cookies in server.
+        </div>
+      </div>
+      <div class="input-container">
+        <label for="clear_after_send">Clear Cookie</label>
+        <label class="switch">
+          <input type="checkbox" id="clear_after_send" aria-describedby="clear_after_send-hint" />
+          <span class="slider"></span>
+        </label>
+        <div class="hint" id="clear_after_send-hint">
+          When Enabled, it wll clear all cookies after send Server URL
+          </div>
+      </div>
+
       <div class="input-container">
         <label for="advanced-cookie">Show Advanced Cookie Options</label>
         <label class="switch">

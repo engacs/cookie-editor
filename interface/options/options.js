@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   const themeHandler = new ThemeHandler(optionHandler);
   const cookieHandler = new CookieHandlerPopup(browserDetector);
   const permissionHandler = new PermissionHandler(browserDetector);
+
+  const server_url = document.getElementById('server_url');
+  const clear_after_send = document.getElementById('clear_after_send');
+  
   const advancedCookieInput = document.getElementById('advanced-cookie');
   const showDevtoolsInput = document.getElementById('devtool-show');
   const animationsEnabledInput = document.getElementById('animations-enabled');
@@ -45,6 +49,9 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     buttonBarTopInput.checked = optionHandler.getButtonBarTop();
     adsEnabledInput.checked = optionHandler.getAdsEnabled();
 
+    server_url.value = optionHandler.getserverURL();
+    clear_after_send.checked = optionHandler.getclearAfterSend();
+
     if (!browserDetector.isSafari()) {
       document
         .querySelectorAll('.github-sponsor')
@@ -56,6 +63,19 @@ document.addEventListener('DOMContentLoaded', async (event) => {
    * Sets the different input listeners to save the form changes.
    */
   function setInputEvents() {
+    server_url.addEventListener('change', (event) => {
+      if (!event.isTrusted) {
+        return;
+      }
+      optionHandler.setserverURL(server_url.value);
+    });
+    clear_after_send.addEventListener('change', (event) => {
+      if (!event.isTrusted) {
+        return;
+      }
+      optionHandler.setclearAfterSend(clear_after_send.checked);
+    });
+
     advancedCookieInput.addEventListener('change', (event) => {
       if (!event.isTrusted) {
         return;

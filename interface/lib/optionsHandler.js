@@ -18,7 +18,7 @@ export class OptionsHandler extends EventEmitter {
    */
   constructor(browserDetector, genericStorageHandler) {
     super();
-    console.log('constructing an optionsHandler');
+   //  console.log('constructing an optionsHandler');
     this.browserDetector = browserDetector;
     this.storageHandler = genericStorageHandler;
     this.isReady = false;
@@ -32,6 +32,37 @@ export class OptionsHandler extends EventEmitter {
     this.backgroundPageConnection.postMessage({
       type: 'init_optionsHandler',
     });
+  }
+
+   /**
+   * @return {string} server url 
+   */
+  getserverURL() {
+    return this.options.serverURL;
+  }
+  /**
+   * Sets whether to serverURL to send data .
+   * @param {string} url value serverurl.
+   */
+  setserverURL(url) {
+    this.options.serverURL = url;
+    this.saveOptions();
+  }
+
+  /**
+   * Gets whether to show advanced cookies or not.
+   * @return {boolean} True to show advanced cookies, otherwise false.
+   */
+  getclearAfterSend() {
+    return this.options.clear_after_send;
+  }
+  /**
+   * Sets whether to show advanced cookies or not.
+   * @param {boolean} isAdvanced True to show advanced cookies, otherwise false.
+   */
+  setclearAfterSend(isAdvanced) {
+    this.options.clear_after_send = isAdvanced;
+    this.saveOptions();
   }
 
   /**
@@ -260,10 +291,10 @@ export class OptionsHandler extends EventEmitter {
    * manually to reload the options.
    */
   async loadOptions() {
-    console.log('Loading options');
+   //  console.log('Loading options');
     this.options = await this.storageHandler.getLocal(optionsKey);
     if (this.options == null) {
-      console.log('No options found, creating new one');
+     //  console.log('No options found, creating new one');
       this.options = new Options();
       await this.saveOptions();
     }
@@ -274,7 +305,7 @@ export class OptionsHandler extends EventEmitter {
    * so you don't need to manually call this after setting something.
    */
   async saveOptions() {
-    console.log('Saving options');
+   //  console.log('Saving options');
     await this.storageHandler.setLocal(optionsKey, this.options);
     this.notifyBackgroundOfChanges();
   }
@@ -311,7 +342,7 @@ export class OptionsHandler extends EventEmitter {
    * @param {object} request
    */
   onMessage = async (request) => {
-    console.log(
+   console.log(
       '[options] background message received: ' + (request.type || 'unknown'),
     );
     switch (request.type) {

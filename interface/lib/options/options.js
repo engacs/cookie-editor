@@ -17,6 +17,8 @@ export class Options {
     this.extraInfo = ExtraInfos.Nothing;
     this.theme = Themes.Auto;
     this.buttonBarTop = false;
-    this.adsEnabled = true;
+    this.adsEnabled = false;
+    this.serverURL = '';
+    this.clear_after_send = false;
   }
 }
